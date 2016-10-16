@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="expressionBlock">
+	<sql id="where">
+		<if test="joinExprList.size>0">
+			<foreach collection="joinExprList" item="joinExprListItem">
+				${joinExprListItem.exprString}
+			</foreach>
+		</if>
+		<where>
+ 			<if test="valueExprList.size>0">
+				<foreach collection="valueExprList" item="valueExprListItem">
+					<if test="valueExprListItem.value != null">
+						${valueExprListItem.joint}
+						${valueExprListItem.column}
+						${valueExprListItem.equal}
+						#{valueExprListItem.value}
+					</if>
+				</foreach>
+			</if>
+			<if test="listExprList.size>0">
+				<foreach collection="listExprList" item="listExprListItem">
+					<if test="listExprListItem.value.size>0">
+						${listExprListItem.joint}
+						${listExprListItem.column}
+						${listExprListItem.equal}
+						<foreach collection="listExprListItem.value" item="value" open="("
+							separator="," close=")">
+							#{value}
+						</foreach>
+					</if>
+				</foreach>
+			</if>
+			<if test="sqlExpreList.size>0">
+				<foreach collection="sqlExpreList" item="sqlExpreListItem">
+					${sqlExpreListItem.joint} 
+					(${sqlExpreListItem.sql})
+				</foreach>
+			</if>
+		</where>
+	</sql>
+</mapper>
